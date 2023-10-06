@@ -34,12 +34,9 @@ router.patch('/:id', postController.updatePost);
 
 router.patch('/:id/category', postController.updateCategory);
 
+router.delete('/:id', postController.deletePost);
 
-
-
-
-
-
+router.delete('/:id/categories', postController.deleteCategories);
 
 
 module.exports = router;

@@ -1,3 +1,5 @@
+const { getRepository } = require('typeorm');
+
 const PostEntity = require('../model/Post').PostEntity;
 const dataSource = require('../connect').dataSource;
 
@@ -59,12 +61,52 @@ function updatePost(data) {
     return result;    
 }
 
-function updateCategory(data) {
-    // 8:36 παρασκευης
+async function updateCategory(data) {
+    
+    const actualRelationsShips = await dataSource
+        .getRepository(PostEntity)
+        .createQueryBuilder()
+        .relation(PostEntity, "categories")
+        .of(data.id)
+        .loadMany();
+
+    const result = await dataSource
+        .getRepository(PostEntity)
+        .createQueryBuilder()
+        .relation(PostEntity, "categories")
+        .of(data.id)
+        .addAndRemove(data.categories, actualRelationsShips)
+        .catch((error) => console.log("Cannot update categories", error));    
+
+    return result;    
+}
+
+
+function deletePost(id) {
+    const result = dataSource
+        .getRepository(PostEntity)
+        .createQueryBuilder()
+        .delete()
+        .from(PostEntity)
+        .where('id = :id', { id : id })
+        .execute();
+
+    return result;    
+}
+
+
+function deleteCategories(data) {
+    const result = dataSource
+        .getRepository(PostEntity)
+        .createQueryBuilder()
+        .relation(PostEntity, "categories")
+        .of(data)
+        .remove(data.categories)
+
+    return result;    
 }
 
 
 
 
-
-module.exports = { findAll, findOne, create, updatePost };
+module.exports = { findAll, findOne, create, updatePost, updateCategory, deletePost, deleteCategories };

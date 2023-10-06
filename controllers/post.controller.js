@@ -69,3 +69,55 @@ exports.updatePost = async(req, res) => {
 }
 
 
+exports.updateCategory = async (req, res) => {
+    const id = req.params.id;
+
+    console.log("Update post category");
+
+    try {
+        const result = await postService.updateCategory(req.body);
+
+        res.status(200).json({ status : true, data : result });
+        console.log("Success in updating post category");
+
+    } catch (err) {
+        res.status(400).json({ status : false, data : err });
+        console.log("Problem in updating post category");
+    }
+}
+
+
+exports.deletePost = async (req, res) => {
+    const id = req.params.id;
+
+    console.log("Delete post");
+
+    try {
+        const result = await postService.deletePost(id);
+
+        res.status(200).json({ status : true, data : result });
+        console.log("Success in deleting post");
+
+    } catch (err) {
+        res.status(400).json({ status : false, data : err });
+        console.log("Problem in deleting post");
+    }
+}
+
+
+exports.deleteCategories = async (req, res) => {
+    const id = req.params.id;
+
+    console.log("Remove categories");
+
+    try {
+        const result = await postService.deleteCategories(req.body);
+
+        res.status(200).json({ status : true, data : result });
+        console.log("Success in removing categories");
+
+    } catch (err) {
+        res.status(400).json({ status : false, data : err });
+        console.log("Problem in removing categories");
+    }
+}
